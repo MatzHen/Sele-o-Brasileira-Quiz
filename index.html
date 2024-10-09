@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Seleção</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="instructions">
+            <h1>Qual Jogador da Seleção Brasileira você seria</h1>
+            <hr>
+            <br>
+            <h2>Instruções</h2>
+            <p>Só responde os bglh tlgd</p>
+            <button id="start-part1">Iniciar Primeira Parte</button>
+            <img src="https://upload.wikimedia.org/wikipedia/pt/d/d0/CBF2019W.png" alt="Logo CBF">
+        </div>
+ 
+        <div id="part1" class="hidden">
+            <h2>Qual Jogador da Seleção Brasileira você seria</h2>
+            <form id="quiz-form">
+                <div>
+                    <hr>
+                    <br>
+                    <strong>Qual posição você prefere</strong><br>
+                    <br>
+                    <label><input type="radio" name="q1" value="Ronaldo"> A - Atacante </label>
+                    <label><input type="radio" name="q1" value="Káka"> B - Meio Campo </label>
+                    <label><input type="radio" name="q1" value="Roberto"> C - Zagueiro / Lateral </label>
+                    <label><input type="radio" name="q1" value="Alisson"> D - Goleiro </label>
+                </div>
+                <div>
+                    <br>
+                    <hr>
+                    <br>
+                    <strong>Qual time você escolheria</strong><br>
+                    <br>
+                    <label><input type="radio" name="q2" value="Káka"> A - Milan </label>
+                    <label><input type="radio" name="q2" value="Ronaldo"> B - Corinthians</label>
+                    <label><input type="radio" name="q2" value="Roberto"> C - Real Madrid</label>
+                    <label><input type="radio" name="q2" value="Alisson"> D - Liverpool</label>
+                </div>
+                <div>
+                    <br>
+                    <hr>
+                    <br>
+                    <strong>Qual ano voce escolheria</strong><br>
+                    <br>
+                    <label><input type="radio" name="q3" value="Ronaldo"> A - 2002</label>
+                    <label><input type="radio" name="q3" value="Káka"> B - 2014</label>
+                    <label><input type="radio" name="q3" value="Alisson"> C - 2019</label>
+                    <label><input type="radio" name="q3" value="Alisson"> D - 2022</label>
+                </div>
+                <div>
+                    <br>
+                    <hr>
+                    <br>
+                    <strong>Qual a melhor bola</strong><br>
+                    <br>
+                    <label><input type="radio" name="q4" value="Ronaldo"> A - Jabulani (2010)</label>
+                    <label><input type="radio" name="q4" value="Káka"> B - Brazuca (2014)</label>
+                    <label><input type="radio" name="q4" value="Alisson"> C - TellStar (2018)</label>
+                    <label><input type="radio" name="q4" value="Roberto"> D - Al Rihla (2022)</label>
+                </div>
+                <div>
+                    <br>
+                    <hr>
+                    <br>
+                    <strong>Escolha uma Qualidade</strong><br>
+                    <br>
+                    <label><input type="radio" name="q5" value="Ronaldo"> A - Drible</label>
+                    <label><input type="radio" name="q5" value="Káka"> B - Passe</label>
+                    <label><input type="radio" name="q5" value="Ronaldo"> C - Finalização</label>
+                    <label><input type="radio" name="q5" value="Roberto"> D - Desarme</label>
+                </div>
+                <button type="submit" id="submit-quiz">Enviar Respostas</button>
+            </form>
+        </div>
+        
+        <div id="result" class="hidden">
+            <h2>Resultado Final</h2>
+            <div id="temperament-details"></div>
+            <img id="temperament-img" src="" alt="Imagem do Jogador" />
+            <button id="finish-test">Finalizar Teste</button>
+            <h1 id="porcronaldo"></h1>
+            <h1 id="porcroberto"></h1>
+            <h1 id="porckáka"></h1>
+            <h1 id="porcalisson"></h1>
+        </div>
+    </div>
+
+    <div id="confetti" class="hidden"></div>
+    <div id="temperament-image" class="hidden">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/d/d0/CBF2019W.png" alt="Imagem do Temperamento">
+    </div>
+
+    <script>
+        document.getElementById("start-part1").addEventListener("click", function() {
+            document.getElementById("instructions").classList.add("hidden");
+            document.getElementById("part1").classList.remove("hidden");
+        });
+    
+        document.getElementById("quiz-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+            
+            // Captura as respostas
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+            const q4 = document.querySelector('input[name="q4"]:checked');
+            const q5 = document.querySelector('input[name="q5"]:checked');
+    
+            // Verifica se todas as perguntas foram respondidas
+            if (!q1 || !q2 || !q3 || !q4 || !q5) {
+                alert("Por favor, responda todas as perguntas.");
+                return;
+            }
+    
+            // Contagem de respostas
+            let pontos = {
+                Ronaldo: 0,
+                Roberto: 0,
+                Káka: 0,
+                Alisson: 0
+            };
+    
+            pontos[q1.value]++;
+            pontos[q2.value]++;
+            pontos[q3.value]++;
+            pontos[q4.value]++;
+            pontos[q5.value]++;
+    
+            // Altere a parte onde você determina o jogador
+let jogador = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
+
+// Defina as URLs das imagens para cada jogador
+let imgSrc;
+if (jogador === "Ronaldo") {
+    imgSrc = "https://conteudo.imguol.com.br/c/esporte/d1/2019/10/27/ronaldo-em-acao-com-a-camisa-do-corinthians-1572176041232_v2_1x1.jpg"; // Imagem do Ronaldo
+} else if (jogador === "Káka") {
+    imgSrc = "https://www.365scores.com/pt-br/news/magazine/wp-content/uploads/2022/04/GettyImages-102124015-scaled-e1650984719787.jpg"; // Substitua pela URL da imagem do Káka
+} else if (jogador === "Roberto") {
+    imgSrc = "https://istoedinheiro.com.br/wp-content/uploads/sites/17/Reuters_Direct_Media/BrazilOnlineReportSportsNews/tagreuters.com2022binary_LYNXMPEI0U112-BASEIMAGE.jpg"; // Substitua pela URL da imagem do Roberto
+} else if (jogador === "Alisson") {
+    imgSrc = "https://conteudo.imguol.com.br/c/esporte/8e/2020/02/11/alisson-durante-treino-da-selecao-brasileira-1581460885294_v2_1x1.jpg"; // Substitua pela URL da imagem do Alisson
+}
+
+// Exibe o resultado
+document.getElementById("temperament-details").innerText = `Você é: ${jogador}`;
+document.getElementById("temperament-img").src = imgSrc;
+
+// Mostra o resultado e oculta a parte do quiz
+document.getElementById("part1").classList.add("hidden");
+document.getElementById("result").classList.remove("hidden");
+    
+            const startButton = document.getElementById("start-part1");
+            const colors = ["blue", "yellow", "green"];
+            let currentColorIndex = 0;
+    
+            function changeColor() {
+                startButton.style.backgroundColor = colors[currentColorIndex];
+                currentColorIndex = (currentColorIndex + 1) % colors.length;
+            }
+    
+            // Altera a cor a cada 500ms
+            setInterval(changeColor, 500);
+            
+        });
+    </script>
+</body>
+</html>
